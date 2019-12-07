@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>ǤỮĦ 🎚</title>
-        <!-- Link para o Font Awesome -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-        <link rel="stylesheet" href="style.css">
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ǤỮĦ 🎚</title>
+    <!-- Link para o Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
     
 <body>
     <!-- Menu de três pontos -->
@@ -51,9 +51,6 @@
                 <a href="https://www.threads.net/@guhlunar" class="social-btn" target="_blank">
                     <i class="fab fa-threads icon"></i> Threads
                 </a>
-                <a href="https://www.twitch.tv/guhdotal" class="social-btn" target="_blank">
-                    <i class="fab fa-twitch icon"></i> Twitch / GuhDoTal
-                </a>
                 <a href="https://www.twitch.tv/guhlunar" class="social-btn" target="_blank">
                     <i class="fab fa-twitch icon"></i> Twitch / GuhLunar
                 </a>  
@@ -63,30 +60,47 @@
                 <!-- Adicione mais links aqui conforme necessário -->
             </div>
         </div>
-        
-        
-
-<!-- Página Spotify -->
-<div id="spotify-page" class="spotify-page">
-    <div class="spotify-content">
-        <h2>Spotify</h2>
-        <p>Pesquise suas músicas favoritas.</p>
-
-        <!-- Barra de pesquisa -->
-        <div class="search-container">
-            <input type="text" id="search-bar" placeholder="Pesquise uma música...">
-            <button id="search-button">Pesquisar</button>
-        </div>
-
-        <!-- Resultados da pesquisa -->
-        <div id="music-list"></div>
-
-        <!-- Status de Conexão -->
-        <div id="connection-status" class="connection-status"></div>
     </div>
-</div>
-    <script src="script.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+    <!-- Botão de Carrinho de Compras -->
+    <div class="shopping-cart" id="shopping-cart-btn">
+        <i class="fas fa-shopping-cart"></i>
+    </div>
+
+    <!-- Div de Links -->
+    <div class="links-container" id="links-container">
+        <div class="links-header">
+            <h2>Ofertas e Links</h2>
+            <p>Confira nossas opções</p>
+        </div>
+        <ul class="links-list">
+            <!-- Links serão inseridos aqui -->
+        </ul>
+    </div>
+
+    <!-- Página do Spotify (oculta inicialmente) -->
+    <div id="spotify-page" class="spotify-page">
+        <div class="spotify-content">
+            <h2>Spotify</h2>
+            <p>Descubra mais no Spotify!</p>
+        </div>
+    </div>
+
+    <!-- Página do Carrinho (oculta inicialmente) -->
+    <div id="cart-page" class="cart-page">
+        <div class="cart-content">
+            <button id="back-button">Voltar</button>
+            <h2>Catálogo</h2>
+            <div class="add-link-container">
+                <input type="text" id="link-input" placeholder="Insira o link aqui">
+                <input type="text" id="image-input" placeholder="Insira a URL da imagem aqui">
+                <button id="add-link-button">Adicionar Link</button>
+            </div>
+            <ul class="catalog-list"></ul>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 </html>
