@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Site</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .container {
+            display: flex; /* Alinha a imagem e o balão lado a lado */
+            align-items: center; /* Centraliza verticalmente */
+            position: relative; /* Permite que os elementos internos sejam posicionados em relação a esse contêiner */
+            top: 10%; /* Ajusta a posição vertical da div */
+            left: 9%; /* Centraliza horizontalmente */
+            transform: translateX(-50%); /* Centraliza horizontalmente */
+        }
+        .foto {
+            width: 200px; /* Ajuste o tamanho conforme necessário */
+            border-radius: 60%; /* Para uma imagem circular */
+            z-index: 1; /* Para ficar na frente */
+        }
+        .balao {
+            position: absolute; /* Permite que o balão fique sobre a imagem */
+            left: 220px; /* Ajusta a posição horizontal do balão em relação à imagem */
+            top: 10%; /* Ajusta a posição vertical do balão */
+            background: rgba(255, 255, 255, 0.9); /* Fundo branco com transparência */
+            border-radius: 10px; /* Bordas arredondadas */
+            padding: 10px; /* Espaçamento interno */
+            max-width: 300px; /* Largura máxima do balão */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra */
+            z-index: 2; /* Para ficar na frente da imagem */
+            border: 1px solid #000000; /* Borda do balão */
+        }
+        .balao:after {
+            content: '';
+            position: absolute;
+            top: 10%; /* Ajusta a posição vertical do triângulo */
+            left: -10px; /* Ajusta a posição horizontal do triângulo */
+            border-width: 10px; /* Tamanho do triângulo */
+            border-style: solid;
+            border-color: transparent transparent rgba(255, 255, 255, 0.9) transparent; /* Triângulo */
+        }
+        .container-redes {
+            display: flex;
+            flex-direction: column; /* Alinha verticalmente */
+            align-items: center; /* Centraliza os itens */
+            margin-top: 7%; /* Espaçamento acima das redes sociais */
+            z-index: 1; /* Para ficar na frente */
+            width: 300px; /* Ajuste o tamanho da div conforme necessário */
+        }
+        .rede {
+            margin: 10px 0; /* Espaçamento vertical entre os botões */
+            text-decoration: none;
+            color: white; /* Cor do texto */
+            font-size: 20px; /* Tamanho da fonte */
+            display: flex;
+            align-items: center; /* Alinha ícone e texto verticalmente */
+            justify-content: center; /* Centraliza o conteúdo */
+            background-color: #0d0d0d; /* Cor de fundo do botão */
+            padding: 15px; /* Espaçamento interno do botão */
+            border-radius: 5px; /* Bordas arredondadas */
+            width: 100%; /* Largura total do botão */
+            transition: background-color 0.3s; /* Efeito de transição */
+        }
+        .rede:hover {
+            background-color: #281421; /* Cor de fundo ao passar o mouse */
+        }
+        .rede i {
+            margin-right: 8px; /* Espaçamento entre ícone e texto */
+        }
+    </style>
+    <script>
+        function getRandomBackground() {
+            const images = [
+                'background/1.gif',
+                'background/2.gif',
+                'background/3.gif',
+                'background/4.gif',
+                'background/5.gif',
+                'background/6.gif',
+                'background/7.gif',
+                'background/8.gif',
+                'background/9.gif',
+                'background/10.gif'
+            ];
+            const randomIndex = Math.floor(Math.random() * images.length);
+            return images[randomIndex];
+        }
+
+        function getRandomMessage() {
+            const messages = [
+                "Sou streamer",
+                "Criador de conteudo digital"
+            ];
+            const randomIndex = Math.floor(Math.random() * messages.length);
+            return messages[randomIndex];
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const backgroundImage = getRandomBackground();
+            document.body.style.backgroundImage = `url('${backgroundImage}')`;
+
+            const message = getRandomMessage();
+            document.getElementById("balao-texto").innerText = message; // Atualiza o texto do balão
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <img src="imagem/principal.gif" alt="Minha Foto" class="foto"> <!-- Imagem central -->
+        <div class="balao" id="balao-texto">Streamer</div>
+    </div>
+    <div class="container-redes">
+        <a href="https://www.instagram.com/seuusuario" class="rede"><i class="fab fa-instagram"></i>Instagram</a>
+        <a href="https://www.youtube.com/seuusuario" class="rede"><i class="fab fa-youtube"></i>YouTube</a>
+        <a href="https://www.tiktok.com/@seuusuario" class="rede"><i class="fab fa-tiktok"></i>TikTok</a>
+        <a href="https://x.com/seuusuario" class="rede"><i class="fab fa-twitter"></i>X</a>
+    </div>
+</body>
+</html>
