@@ -34,22 +34,21 @@
             overflow-y: auto; /* Permite rolagem no conteúdo */
         }
         .container {
-            display: flex; /* Alinha a imagem e o balão lado a lado */
-            align-items: center; /* Centraliza verticalmente */
-            position: relative; /* Permite que os elementos internos sejam posicionados em relação a esse contêiner */
+            display: flex;
+            flex-direction: column; /* Muda para coluna em telas menores */
+            align-items: center; /* Centraliza horizontalmente */
+            position: relative;
             top: 50%; /* Ajusta a posição vertical da div */
-            left: 9%; /* Centraliza horizontalmente */
-            transform: translateX(-50%); /* Centraliza horizontalmente */
+            transform: translateY(-50%); /* Centraliza verticalmente */
         }
         .foto {
-            width: 200px; /* Ajuste o tamanho conforme necessário */
-            border-radius: 4%; /* Para uma imagem circular */
+            width: 150px; /* Ajuste o tamanho conforme necessário */
+            border-radius: 50%; /* Para uma imagem circular */
+            margin-bottom: 10px; /* Espaçamento entre a imagem e o balão */
             z-index: 1; /* Para ficar na frente */
         }
         .balao {
-            position: absolute; /* Permite que o balão fique sobre a imagem */
-            left: 220px; /* Ajusta a posição horizontal do balão em relação à imagem */
-            top: 10%; /* Ajusta a posição vertical do balão */
+            position: relative; /* Muda para relativo para evitar sobreposição */
             background: rgba(255, 255, 255, 0.9); /* Fundo branco com transparência */
             border-radius: 10px; /* Bordas arredondadas */
             padding: 10px; /* Espaçamento interno */
@@ -159,3 +158,4 @@
     </div>
 </body>
 </html>
+
