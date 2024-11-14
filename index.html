@@ -34,21 +34,22 @@
             overflow-y: auto; /* Permite rolagem no conteúdo */
         }
         .container {
-            display: flex;
-            flex-direction: column; /* Muda para coluna em telas menores */
-            align-items: center; /* Centraliza horizontalmente */
-            position: relative;
+            display: flex; /* Alinha a imagem e o balão lado a lado */
+            align-items: center; /* Centraliza verticalmente */
+            position: relative; /* Permite que os elementos internos sejam posicionados em relação a esse contêiner */
             top: 50%; /* Ajusta a posição vertical da div */
-            transform: translateY(-50%); /* Centraliza verticalmente */
+            left: 9%; /* Centraliza horizontalmente */
+            transform: translateX(-50%); /* Centraliza horizontalmente */
         }
         .foto {
-            width: 150px; /* Ajuste o tamanho conforme necessário */
-            border-radius: 50%; /* Para uma imagem circular */
-            margin-bottom: 10px; /* Espaçamento entre a imagem e o balão */
+            width: 200px; /* Ajuste o tamanho conforme necessário */
+            border-radius: 4%; /* Para uma imagem circular */
             z-index: 1; /* Para ficar na frente */
         }
         .balao {
-            position: relative; /* Muda para relativo para evitar sobreposição */
+            position: absolute; /* Permite que o balão fique sobre a imagem */
+            left: 220px; /* Ajusta a posição horizontal do balão em relação à imagem */
+            top: 10%; /* Ajusta a posição vertical do balão */
             background: rgba(255, 255, 255, 0.9); /* Fundo branco com transparência */
             border-radius: 10px; /* Bordas arredondadas */
             padding: 10px; /* Espaçamento interno */
@@ -71,7 +72,7 @@
             flex-direction: column; /* Alinha verticalmente */
             align-items: center; /* Centraliza os itens */
             margin-top: 30%; /* Espaçamento acima das redes sociais */
-            z-index: 1; /* Para ficar na frente */
+            z-index: 2; /* Para ficar na frente */
             width: 300px; /* Ajuste o tamanho da div conforme necessário */
         }
         .rede {
@@ -86,7 +87,8 @@
             padding: 15px; /* Espaçamento interno do botão */
             border-radius: 5px; /* Bordas arredondadas */
             width: 100%; /* Largura total do botão */
-            transition: background-color 0.3s; /* Efeito de transição */
+            transition: background-color 0.3s;
+            z-index: 1; /* Efeito de transição */
         }
         .rede:hover {
             background-color: #281421; /* Cor de fundo ao passar o mouse */
@@ -145,6 +147,7 @@
             <img src="Imagem/principal.gif" alt="Minha Foto" class="foto"> <!-- Imagem central -->
             <div class="balao" id="balao-texto">Streamer</div>
         </div>
+        
         <div class="container-redes">
             <hr class="divisoria">
             <a href="https://www.instagram.com/guhlunar" class="rede"><i class="fab fa-instagram"></i>Instagram</a>
@@ -158,4 +161,3 @@
     </div>
 </body>
 </html>
-
