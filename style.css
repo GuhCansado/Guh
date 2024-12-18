@@ -173,96 +173,91 @@ h1 {
 
 
 
-
-
-#spotify-page {
-    font-family: Arial, sans-serif;
-    background-color: #1a1a1a;
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #121212;
     color: white;
-    padding: 20px;
-    border-radius: 10px;
-    width: 80%;
-    margin: 0 auto;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
-.spotify-content {
+.spotify-page {
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+    background-color: #1DB954;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+h2 {
     text-align: center;
+    color: white;
+    margin-bottom: 20px;
 }
 
 .search-container {
-    margin-top: 20px;
     display: flex;
     justify-content: center;
-    gap: 10px;
+    margin-bottom: 20px;
 }
 
 #search-bar {
+    width: 70%;
     padding: 10px;
+    border-radius: 20px;
     border: none;
-    border-radius: 5px;
-    width: 300px;
-    font-size: 16px;
+    margin-right: 10px;
 }
 
 #search-button {
-    padding: 10px 20px;
     background-color: #1DB954;
-    border: none;
-    border-radius: 5px;
     color: white;
-    font-size: 16px;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
     cursor: pointer;
 }
 
 #search-button:hover {
-    background-color: #1aa34a;
+    background-color: #1ed760;
 }
 
 #music-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-height: 400px; /* Defina a altura máxima desejada */
+    overflow-y: auto;  /* Ativa a rolagem vertical */
     margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
-.music-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #333;
+
+#music-list .music-item {
+    width: 45%;
+    background-color: #282828;
     padding: 10px;
-    margin: 5px;
+    margin: 10px 0;
     border-radius: 5px;
-    width: 300px;
-}
-
-#playlist-container {
-    margin-top: 30px;
-}
-
-#playlist {
-    list-style-type: none;
-    padding: 0;
-}
-
-.playlist-item {
-    display: flex;
-    justify-content: space-between;
-    background-color: #333;
-    padding: 10px;
-    margin: 5px;
-    border-radius: 5px;
-}
-
-.playlist-item button {
-    background-color: #1DB954;
-    border: none;
-    color: white;
-    padding: 5px 10px;
     cursor: pointer;
 }
 
-.playlist-item button:hover {
-    background-color: #1aa34a;
+#music-list img {
+    width: 100%;
+    border-radius: 5px;
 }
 
+#music-list .music-info {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.connection-status {
+    text-align: center;
+    margin-top: 20px;
+    color: #ff0000;
+}

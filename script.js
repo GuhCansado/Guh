@@ -30,17 +30,12 @@ document.getElementById('spotify-page').addEventListener('click', function(e) {
 
 
 
-// Variáveis globais
 const clientId = '7f2cbc75628240c7ae420480f7e9a770';
 const clientSecret = '4b01ef0ceccd46f4921f5a2c2abd792b';
 let accessToken = '';
-let currentTrackId = '';
+let connectionStatus = document.getElementById('connection-status');
 
-// Variável para o tamanho máximo da playlist
-const playlistSize = 10;
-let currentPlaylistSize = 0;
-
-// Função para obter o token de acesso
+// Função para obter o token de acesso do Spotify
 async function getAccessToken() {
     const response = await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
@@ -55,110 +50,73 @@ async function getAccessToken() {
     accessToken = data.access_token;
 }
 
-// Função para pesquisar músicas no Spotify
+// Função para pesquisar músicas
 async function searchMusic(query) {
-    const response = await fetch(`https://api.spotify.com/v1/search?q=${query}&type=track&limit=5`, {
+    if (!accessToken) {
+        await getAccessToken();
+    }
+
+    const response = await fetch(`https://api.spotify.com/v1/search?q=${query}&type=track&limit=6`, {
         headers: {
             'Authorization': `Bearer ${accessToken}`
         }
     });
-    
+
     const data = await response.json();
     displayMusicList(data.tracks.items);
 }
 
-// Função para exibir a lista de músicas
+// Função para exibir os resultados da pesquisa
 function displayMusicList(tracks) {
     const musicListContainer = document.getElementById('music-list');
     musicListContainer.innerHTML = '';
+
     tracks.forEach(track => {
-        const li = document.createElement('li');
-        li.textContent = track.name;
-        const addButton = document.createElement('button');
-        addButton.textContent = 'Adicionar';
-        addButton.onclick = () => addToPlaylist(track);
-        li.appendChild(addButton);
-        musicListContainer.appendChild(li);
+        const musicItem = document.createElement('div');
+        musicItem.classList.add('music-item');
+        musicItem.innerHTML = `
+            <img src="${track.album.images[0].url}" alt="${track.name}">
+            <div class="music-info">
+                <p>${track.name}</p>
+                <p>${track.artists.map(artist => artist.name).join(', ')}</p>
+                <button class="add-button" data-track-id="${track.id}">Adicionar</button>
+            </div>
+        `;
+        
+        // Adiciona o evento de clicar no botão de adicionar
+        musicItem.querySelector('.add-button').addEventListener('click', () => addMusic(track));
+
+        musicListContainer.appendChild(musicItem);
     });
 }
 
-// Função para adicionar uma música à playlist
-function addToPlaylist(track) {
-    if (currentPlaylistSize >= playlistSize) {
-        // Se a playlist estiver cheia, exibe uma mensagem
-        document.getElementById('playlist-status').textContent = 'A playlist está cheia. Remova uma música para adicionar outra.';
-        return;
-    }
+// Função para adicionar a música e interagir com o servidor Python
+async function addMusic(track) {
+    try {
+        const response = await fetch('http://localhost:5000/play', {  // Supondo que o servidor Python esteja na porta 5000
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ trackId: track.id, trackName: track.name })
+        });
 
-    // Se não estiver cheia, adiciona a música à playlist
-    const playlistContainer = document.getElementById('playlist');
-    const li = document.createElement('li');
-    li.textContent = track.name;
-    li.id = track.id;
-
-    // Adicionar evento para remover da playlist
-    li.onclick = () => {
-        removeFromPlaylist(track.id);
-    };
-    playlistContainer.appendChild(li);
-
-    // Atualiza o tamanho da playlist
-    currentPlaylistSize++;
-
-    // Atualiza a mensagem de status da playlist
-    if (currentPlaylistSize === playlistSize) {
-        document.getElementById('playlist-status').textContent = 'Playlist cheia!';
-    } else {
-        document.getElementById('playlist-status').textContent = '';
-    }
-}
-
-// Função para remover música da playlist
-function removeFromPlaylist(trackId) {
-    const li = document.getElementById(trackId);
-    li.remove();
-    
-    // Atualiza o tamanho da playlist
-    currentPlaylistSize--;
-
-    // Se a playlist não estiver cheia, limpa a mensagem de "cheia"
-    if (currentPlaylistSize < playlistSize) {
-        document.getElementById('playlist-status').textContent = '';
-    }
-}
-
-// Função para exibir a música que está tocando no momento
-async function displayCurrentTrack() {
-    const response = await fetch('https://api.spotify.com/v1/me/player/currently-playing', {
-        headers: {
-            'Authorization': `Bearer ${accessToken}`
+        if (response.ok) {
+            connectionStatus.textContent = 'Música alterada com sucesso!';
+        } else {
+            connectionStatus.textContent = 'Erro ao comunicar com o servidor.';
         }
-    });
-
-    if (response.ok) {
-        const data = await response.json();
-        if (data.item) {
-            const currentTrackContainer = document.getElementById('current-track-info');
-            currentTrackContainer.innerHTML = `
-                <p>${data.item.name} - ${data.item.artists[0].name}</p>
-                <img src="${data.item.album.images[0].url}" alt="Cover" style="width: 100px;">
-            `;
-            currentTrackId = data.item.id;
-        }
-    } else {
-        const currentTrackContainer = document.getElementById('current-track-info');
-        currentTrackContainer.innerHTML = '<p>Nenhuma música tocando no momento.</p>';
+    } catch (error) {
+        connectionStatus.textContent = 'Sem conexão';
     }
 }
 
 // Inicialização
-window.onload = async () => {
-    await getAccessToken();
+window.onload = () => {
+    getAccessToken();
+    
     document.getElementById('search-button').onclick = () => {
         const query = document.getElementById('search-bar').value;
         searchMusic(query);
     };
-
-    displayCurrentTrack();
-    setInterval(displayCurrentTrack, 10000);  // Atualizar a música atual a cada 10 segundos
 };
