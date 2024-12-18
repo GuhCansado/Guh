@@ -91,9 +91,10 @@ function displayMusicList(tracks) {
 }
 
 // Função para adicionar a música e interagir com o servidor Python
+// Função para adicionar a música e interagir com o servidor Python
 async function addMusic(track) {
     try {
-        const response = await fetch('http://localhost:5000/play', {  // Supondo que o servidor Python esteja na porta 5000
+        const response = await fetch('http://xxxxxx.ngrok.io/play', {  // Substitua com o URL do Ngrok
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -110,6 +111,7 @@ async function addMusic(track) {
         connectionStatus.textContent = 'Sem conexão';
     }
 }
+
 
 // Inicialização
 window.onload = () => {
