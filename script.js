@@ -49,48 +49,11 @@ document.getElementById('spotify-page').addEventListener('click', function(e) {
     }
 });
 
-// Exibir a página do carrinho
-document.getElementById("shopping-cart-btn").addEventListener("click", function() {
-    document.getElementById("cart-page").style.display = 'flex';
-});
 
-// Fechar a página do carrinho
-document.getElementById("back-button").addEventListener("click", function() {
-    document.getElementById("cart-page").style.display = 'none';
-});
 
-// Adicionar link e imagem ao catálogo
-document.getElementById("add-link-button").addEventListener("click", function() {
-    const linkUrl = document.getElementById("link-input").value;
-    const imageUrl = document.getElementById("image-input").value;
 
-    if (linkUrl && imageUrl) {
-        const ul = document.querySelector(".catalog-list");
-        const li = document.createElement("li");
 
-        // Cria a imagem
-        const img = document.createElement("img");
-        img.src = imageUrl;
-        img.alt = "Imagem do Link";
-        img.style.width = "100%"; // Ajuste a largura da imagem
 
-        // Cria o link
-        const a = document.createElement("a");
-        a.href = linkUrl;
-        a.target = "_blank";
-        a.textContent = linkUrl;
 
-        // Adiciona a imagem e o link ao item da lista
-        li.appendChild(img);
-        li.appendChild(a);
 
-        // Adiciona o item à lista
-        ul.appendChild(li);
 
-        // Limpa os campos de entrada
-        document.getElementById("link-input").value = '';
-        document.getElementById("image-input").value = '';
-    } else {
-        alert("Por favor, insira tanto a URL do link quanto a URL da imagem.");
-    }
-});
