@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ǤỮĦ 🎚</title>
-    <!-- Link para o Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ǤỮĦ 🎚</title>
+        <!-- Link para o Font Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="stylesheet" href="style.css">
+    </head>
     
 <body>
     <!-- Menu de três pontos -->
@@ -27,76 +27,36 @@
         <div class="content">
             <h1>ǤỮĦ 🎚</h1>
             <div class="social-buttons">
+                <!-- Adicione os links para redes sociais aqui -->
+                <!-- Exemplo -->
                 <a href="https://www.instagram.com/guhlunar" class="social-btn" target="_blank">
                     <i class="fab fa-instagram icon"></i> Instagram
                 </a>
-                <a href="https://discord.gg/7F9YbfvUXD" class="social-btn" target="_blank">
-                    <i class="fab fa-discord icon"></i> Discord
-                </a>                
-                <a href="https://www.tiktok.com/@guhlunar" class="social-btn" target="_blank">
-                    <i class="fab fa-tiktok icon"></i> Tiktok / @guhlunar
-                </a>
-                <a href="https://www.tiktok.com/@guhdotal" class="social-btn" target="_blank">
-                    <i class="fab fa-tiktok icon"></i> Tiktok / @guhdotal
-                </a>                
-                <a href="https://x.com/GuhLunar" class="social-btn" target="_blank">
-                    <i class="fab fa-x icon"></i> X
-                </a>
-                <a href="https://www.youtube.com/@TalDoGuh" class="social-btn" target="_blank">
-                    <i class="fab fa-youtube icon"></i> Youtube / @TalDoGuh
-                </a>
-                <a href="https://www.youtube.com/@GuhLunar" class="social-btn" target="_blank">
-                    <i class="fab fa-youtube icon"></i> Youtube / @GuhLunar
-                </a>                
-                <a href="https://www.threads.net/@guhlunar" class="social-btn" target="_blank">
-                    <i class="fab fa-threads icon"></i> Threads
-                </a>
-                <a href="https://www.twitch.tv/guhlunar" class="social-btn" target="_blank">
-                    <i class="fab fa-twitch icon"></i> Twitch / GuhLunar
-                </a>                
-                <!-- Adicione mais links aqui conforme necessário -->
             </div>
         </div>
     </div>
 
-    <!-- Botão de Carrinho de Compras -->
-    <div class="shopping-cart" id="shopping-cart-btn">
-        <i class="fas fa-shopping-cart"></i>
-    </div>
+    <!-- Página Spotify -->
+    <div id="spotify-page" class="spotify-page">
+        <div class="spotify-content">
+            <h2>Spotify</h2>
+            <p>Pesquise suas músicas favoritas.</p>
+            <!-- Barra de pesquisa -->
+            <div class="search-container">
+                <input type="text" id="search-bar" placeholder="Pesquise uma música...">
+                <button id="search-button">Pesquisar</button>
+            </div>
 
+            <!-- Resultados da pesquisa -->
+            <div id="music-list"></div>
 
-    
-    <!-- Página do Carrinho (oculta inicialmente) -->
-    <div id="cart-page" class="cart-page">
-        <div class="cart-content">
-            <button id="back-button">Voltar</button>
-            <h2>Catálogo</h2>
-            <ul class="catalog-list">
-                <li>
-                    <img src="https://via.placeholder.com/150" alt="Imagem 1">
-                    <a href="https://www.exemplo1.com" target="_blank">Exemplo 1</a>
-                </li>
-                <li>
-                    <img src="https://via.placeholder.com/150" alt="Imagem 2">
-                    <a href="https://www.exemplo2.com" target="_blank">Exemplo 2</a>
-                </li>
-                <li>
-                    <img src="https://via.placeholder.com/150" alt="Imagem 3">
-                    <a href="https://www.exemplo3.com" target="_blank">Exemplo 3</a>
-                </li>
-                <!-- Adicione mais itens conforme necessário -->
-            </ul>
+            <!-- Status de Conexão -->
+            <div id="connection-status" class="connection-status"></div>
         </div>
     </div>
-
+    
     <script src="script.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    
-
-    <script src="script.js"></script>
 </body>
 </html>

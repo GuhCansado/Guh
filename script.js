@@ -1,3 +1,4 @@
+// Função para mudar o fundo aleatoriamente
 window.onload = function() {
     // Defina as imagens e suas respectivas chances de exibição
     let imagens = [
@@ -18,31 +19,23 @@ window.onload = function() {
     ];
 
     // Gera um número aleatório entre 0 e 100
-    let randomChance = Math.floor(Math.random() * 101); // randomChance entre 0 e 100
-    let cumulativeChance = 0; // Chance acumulada
+    let randomChance = Math.floor(Math.random() * 101);
+    let cumulativeChance = 0; 
 
     // Verifica qual imagem será selecionada com base nas chances
     for (let i = 0; i < imagens.length; i++) {
         cumulativeChance += imagens[i].chance;
 
-        // Se o número aleatório for menor ou igual à chance acumulada, seleciona esta imagem
         if (randomChance < cumulativeChance) {
             document.body.style.backgroundImage = `url(${imagens[i].src})`;
             console.log(`Imagem selecionada: ${imagens[i].src} com chance de ${imagens[i].chance}%`);
-            return; // Sai da função após definir o fundo
+            return;
         }
     }
-
-    // Caso o número aleatório não caia em nenhuma das chances acumuladas
     console.log("Nenhuma imagem foi selecionada, chances não atendidas.");
-    let imagens = ['IMG/imagem1.gif', 'IMG/imagem2.gif', 'IMG/imagem3.gif', 
-        'IMG/imagem4.gif', 'IMG/imagem5.gif', 'IMG/imagem6.gif','IMG/imagem7.gif',
-        'IMG/imagem7.gif','IMG/imagem8.gif','IMG/imagem9.gif','IMG/imagem10.gif',
-        'IMG/imagem11.gif','IMG/imagem12.gif','IMG/imagem13.gif','IMG/imagem14.gif',
-        'IMG/imagem15.gif']; // Adicione o caminho das suas imagens aqui
-    let randomImage = imagens[Math.floor(Math.random() * imagens.length)];
+    let randomImage = imagens[Math.floor(Math.random() * imagens.length)].src;
     document.body.style.backgroundImage = `url(${randomImage})`;
-}
+};
 
 // Abrir a página Spotify
 document.querySelector('.menu').addEventListener('click', function() {
@@ -56,15 +49,7 @@ document.getElementById('spotify-page').addEventListener('click', function(e) {
     }
 });
 
-
-
-
-
-
-
-
-
-
+// Funções de pesquisa e interação com o Spotify
 const clientId = '7f2cbc75628240c7ae420480f7e9a770';
 const clientSecret = '4b01ef0ceccd46f4921f5a2c2abd792b';
 let accessToken = '';
@@ -126,7 +111,6 @@ function displayMusicList(tracks) {
 }
 
 // Função para adicionar a música e interagir com o servidor Python
-// Função para adicionar a música e interagir com o servidor Python
 async function addMusic(track) {
     try {
         const response = await fetch('http://xxxxxx.ngrok.io/play', {  // Substitua com o URL do Ngrok
@@ -139,21 +123,4 @@ async function addMusic(track) {
 
         if (response.ok) {
             connectionStatus.textContent = 'Música alterada com sucesso!';
-        } else {
-            connectionStatus.textContent = 'Erro ao comunicar com o servidor.';
-        }
-    } catch (error) {
-        connectionStatus.textContent = 'Sem conexão';
-    }
-}
-
-
-// Inicialização
-window.onload = () => {
-    getAccessToken();
-    
-    document.getElementById('search-button').onclick = () => {
-        const query = document.getElementById('search-bar').value;
-        searchMusic(query);
-    };
-};
+       
