@@ -1,56 +1,44 @@
-from flask import Flask, request, jsonify, redirect
-import spotipy
+from flask import Flask, request, jsonify
+from spotipy import Spotify
 from spotipy.oauth2 import SpotifyOAuth
-import os
 
 app = Flask(__name__)
 
-# Configurações do Spotify
-client_id = '7f2cbc75628240c7ae420480f7e9a770'
-client_secret = '4b01ef0ceccd46f4921f5a2c2abd792b'
+# Credenciais do Spotify
+sp = Spotify(auth_manager=SpotifyOAuth(
+    client_id="7f2cbc75628240c7ae420480f7e9a770",
+    client_secret="4b01ef0ceccd46f4921f5a2c2abd792b",
+    redirect_uri="http://localhost:8888/callback",
+    scope="user-modify-playback-state"
+))
 
-# Substitua com o URL do Ngrok, por exemplo: http://abc123.ngrok.io/callback
-redirect_uri = 'http://abc123.ngrok.io/callback'
-scope = "user-modify-playback-state user-read-playback-state"
+playlist = []  # Lista de músicas
 
-# Autenticação com Spotify
-sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=client_id,
-                                               client_secret=client_secret,
-                                               redirect_uri=redirect_uri,
-                                               scope=scope))
+@app.route('/add', methods=['POST'])
+def add_to_playlist():
+    data = request.json
+    track_id = data.get('trackId')
 
-@app.route('/')
-def home():
-    return "Servidor Flask está funcionando!"
+    if not track_id:
+        return jsonify({'error': 'Track ID é necessário'}), 400
 
-# Rota para autenticação e redirecionamento
-@app.route('/login')
-def login():
-    auth_url = sp.auth_manager.get_authorize_url()
-    return redirect(auth_url)
+    playlist.append(track_id)
+    return jsonify({'message': 'Música adicionada com sucesso'}), 200
 
-@app.route('/callback')
-def callback():
-    # Esse código será chamado após o login do usuário
-    sp.auth_manager.get_access_token(request.args['code'])
-    return "Autenticação concluída com sucesso!"
-
-# Rota para mudar a música no Spotify
 @app.route('/play', methods=['POST'])
 def play_music():
-    data = request.get_json()
-    track_id = data.get('trackId')
-    
-    if not track_id:
-        return jsonify({'error': 'Track ID missing'}), 400
+    if not playlist:
+        print("Sem música")
+        return jsonify({'error': 'Nenhuma música na playlist'}), 400
 
-    try:
-        # Toca a música com o ID fornecido
-        sp.start_playback(uris=[f"spotify:track:{track_id}"])
-        return jsonify({'message': 'Playback started'}), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+    # Tocar a próxima música
+    current_track = playlist.pop(0)
+    sp.start_playback(uris=[f'spotify:track:{current_track}'])
+
+    return jsonify({'message': 'Tocando música', 'track_id': current_track}), 200
 
 if __name__ == '__main__':
-    # Inicia o servidor Flask na porta 5000, acessível via qualquer IP
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    from pyngrok import ngrok
+    public_url = ngrok.connect(5000)
+    print(f"NGROK URL: {public_url}")
+    app.run(port=5000)
