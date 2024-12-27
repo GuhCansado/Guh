@@ -95,9 +95,72 @@ spotifyPage.addEventListener('click', (e) => {
     }
 });
 
+// Configuração do Ngrok ou URL do servidor Python
+const serverURL = "http://localhost:5000"; // Substitua pela URL gerada pelo Ngrok se necessário
 
-// Integração com o Spotify
-const ngrokURL = "http://localhost:5000"; // Substitua pelo URL do seu Ngrok
+// Adicionar música à playlist no servidor Python
+async function addToPlaylist(button, trackId) {
+    button.disabled = true; // Evita cliques repetidos
+
+    try {
+        const response = await fetch(`${serverURL}/add`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ trackId })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log("Música adicionada:", data);
+            button.innerText = "✓"; // Indica sucesso
+            button.classList.add('success');
+        } else {
+            throw new Error("Erro ao adicionar música.");
+        }
+    } catch (error) {
+        console.error("Erro ao adicionar música:", error);
+        button.innerText = "X"; // Indica erro
+        button.classList.add('error');
+    } finally {
+        setTimeout(() => {
+            button.disabled = false; // Reativa o botão
+            button.innerText = "+"; // Reseta o texto do botão
+            button.classList.remove('success', 'error');
+        }, 2000);
+    }
+}
+
+// Atualizar status da playlist
+async function updateStatus() {
+    try {
+        const response = await fetch(`${serverURL}/status`);
+        if (response.ok) {
+            const data = await response.json();
+            console.log("Status da Playlist:", data);
+
+            // Atualiza a interface com dados do status
+            const currentTrackElement = document.getElementById('current-track');
+            const playlistElement = document.getElementById('playlist');
+
+            currentTrackElement.innerText = data.current_track
+                ? `Tocando agora: ${data.current_track}`
+                : "Nenhuma música tocando";
+
+            playlistElement.innerText = data.playlist.length
+                ? data.playlist.join("\n")
+                : "Nenhuma música na fila";
+        } else {
+            throw new Error("Erro ao obter status.");
+        }
+    } catch (error) {
+        console.error("Erro ao atualizar status:", error);
+    }
+}
+
+// Atualiza o status periodicamente
+setInterval(updateStatus, 5000);
 
 // Pesquisar músicas no Spotify
 document.getElementById('search-button').addEventListener('click', async () => {
@@ -112,8 +175,8 @@ document.getElementById('search-button').addEventListener('click', async () => {
 
 // Obter token de autenticação do Spotify
 async function getSpotifyToken() {
-    const clientId = "7f2cbc75628240c7ae420480f7e9a770"; // Substitua pelo seu Client ID
-    const clientSecret = "4b01ef0ceccd46f4921f5a2c2abd792b"; // Substitua pelo seu Client Secret
+    const clientId = "7f2cbc75628240c7ae420480f7e9a770";
+    const clientSecret = "4b01ef0ceccd46f4921f5a2c2abd792b";
     const auth = btoa(`${clientId}:${clientSecret}`);
 
     const response = await fetch('https://accounts.spotify.com/api/token', {
@@ -129,7 +192,7 @@ async function getSpotifyToken() {
     return data.access_token;
 }
 
-// Buscar músicas usando a API do Spotify
+// Buscar músicas no Spotify
 async function fetchSpotifyTracks(query, token) {
     const response = await fetch(
         `https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=track&limit=10`,
@@ -164,35 +227,4 @@ function displayResults(tracks) {
 
         resultsContainer.appendChild(musicDiv);
     });
-}
-
-// Adicionar música à playlist no servidor Python com animação
-async function addToPlaylist(button, trackId) {
-    button.disabled = true; // Evita cliques repetidos
-
-    try {
-        const response = await fetch(`${ngrokURL}/add`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ trackId })
-        });
-
-        if (response.ok) {
-            button.innerText = "✓"; // Sucesso
-            button.classList.add('success');
-        } else {
-            throw new Error("Erro ao adicionar música.");
-        }
-    } catch (error) {
-        button.innerText = "X"; // Erro
-        button.classList.add('error');
-    } finally {
-        setTimeout(() => {
-            button.disabled = false; // Reabilita o botão após 2 segundos
-            button.innerText = "+"; // Reseta para o estado inicial
-            button.classList.remove('success', 'error');
-        }, 2000);
-    }
 }
