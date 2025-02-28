@@ -281,6 +281,6 @@ h1 {
 }
 
 .shop-button:hover {
-    background-color: #1ed760;
+    background-color: #1ed75f41;
     transform: scale(1.1);
 }
