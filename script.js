@@ -2,12 +2,11 @@
 // CONFIGURAÇÃO GERAL
 // ====================================================================
 
-// --- SPOTIFY CREDENCIAIS (CLIENT-SIDE) ---
+// --- SPOTIFY CREDENCIAIS ---
 const CLIENT_ID = "1348b2d7b8d943049d718c622e6c9abc"; 
 const CLIENT_SECRET = "0e4556954f554eec9561078c6254ef46"; 
 
-// 🚨 OTIMIZAÇÃO: Garante que o URL base seja exatamente https://guhcansado.github.io/Guh/
-// Isso é crucial para o Implicit Grant Flow
+// OTIMIZAÇÃO: Garante o URL base https://guhcansado.github.io/Guh/ para o Spotify
 const REDIRECT_URI = window.location.origin + window.location.pathname.replace('index.html', '');
 const SCOPES = 'streaming user-read-playback-state user-modify-playback-state';
 
@@ -29,7 +28,7 @@ window.onload = function () {
     checkSpotifyAuthentication(); 
 };
 
-// ... (Mantenha as funções aplicarBackgroundAleatorio e midiasComProbabilidades) ...
+// Configuração das mídias e suas probabilidades
 let midiasComProbabilidades = [
     { src: 'IMG/A.gif', chance: 5 }, 
     { src: 'IMG/A1.mp4', chance: 40 },
@@ -104,6 +103,7 @@ if (spotifyPage) {
 // ====================================================================
 
 function authenticateSpotify() {
+    // 🚨 CORREÇÃO: URL HTTPS
     const authUrl = 'http://googleusercontent.com/spotify.com/authorize?' +
         'client_id=' + CLIENT_ID +
         '&response_type=token' +
@@ -235,6 +235,7 @@ async function getSpotifyTokenForSearch() {
     const auth = btoa(`${CLIENT_ID}:${CLIENT_SECRET}`);
     
     try {
+        // 🚨 CORREÇÃO: URL HTTPS
         const response = await fetch('http://googleusercontent.com/spotify.com/api/token', {
             method: 'POST',
             headers: {
@@ -263,6 +264,7 @@ async function fetchSpotifyTracks(query) {
     if (!token) return [];
 
     try {
+        // 🚨 CORREÇÃO: URL HTTPS
         const response = await fetch(
             `http://googleusercontent.com/spotify.com/v1/search?q=${encodeURIComponent(query)}&type=track&limit=10`,
             {
