@@ -3,11 +3,12 @@
 // ====================================================================
 
 // --- SPOTIFY CREDENCIAIS (CLIENT-SIDE) ---
-// O Client Secret está incluído apenas para a função de pesquisa (getSpotifyTokenForSearch),
-// o que é um risco de segurança, mas é o único caminho 100% frontend para pesquisa sem backend.
 const CLIENT_ID = "1348b2d7b8d943049d718c622e6c9abc"; 
 const CLIENT_SECRET = "0e4556954f554eec9561078c6254ef46"; 
-const REDIRECT_URI = window.location.href.split('#')[0]; // URL atual do seu site
+
+// 🚨 OTIMIZAÇÃO: Garante que o URL base seja exatamente https://guhcansado.github.io/Guh/
+// Isso é crucial para o Implicit Grant Flow
+const REDIRECT_URI = window.location.origin + window.location.pathname.replace('index.html', '');
 const SCOPES = 'streaming user-read-playback-state user-modify-playback-state';
 
 let ACCESS_TOKEN = null;
@@ -17,7 +18,6 @@ let spotifyPlayer; // Variável global para o Player SDK
 // FUNÇÕES DE INICIALIZAÇÃO E BACKGROUND
 // ====================================================================
 
-// Tela de abertura: esconde o texto de introdução após 1 segundo
 window.onload = function () {
     aplicarBackgroundAleatorio(); 
     setTimeout(() => {
@@ -26,10 +26,10 @@ window.onload = function () {
             intro.style.display = 'none';
         }
     }, 1000);
-    checkSpotifyAuthentication(); // Checa se já existe um token no URL
+    checkSpotifyAuthentication(); 
 };
 
-// Configuração das mídias e suas probabilidades
+// ... (Mantenha as funções aplicarBackgroundAleatorio e midiasComProbabilidades) ...
 let midiasComProbabilidades = [
     { src: 'IMG/A.gif', chance: 5 }, 
     { src: 'IMG/A1.mp4', chance: 40 },
@@ -45,7 +45,6 @@ let midiasComProbabilidades = [
     { src: 'IMG/A11.gif', chance: 55 }     
 ];
 
-// Aplica o background aleatório baseado na probabilidade
 function aplicarBackgroundAleatorio() {
     let midias = [];
     midiasComProbabilidades.forEach(midia => {
@@ -76,6 +75,7 @@ function aplicarBackgroundAleatorio() {
     }
 }
 
+
 // ====================================================================
 // FUNÇÕES DE INTERFACE (MENU)
 // ====================================================================
@@ -83,7 +83,6 @@ function aplicarBackgroundAleatorio() {
 const menu = document.querySelector('.menu');
 const spotifyPage = document.getElementById('spotify-page');
 
-// Abre a página do Spotify ao clicar nos três pontos
 if (menu) {
     menu.addEventListener('click', () => {
         if (spotifyPage) {
@@ -92,7 +91,6 @@ if (menu) {
     });
 }
 
-// Fecha a página do Spotify ao clicar fora do conteúdo
 if (spotifyPage) {
     spotifyPage.addEventListener('click', (e) => {
         if (e.target === spotifyPage) {
@@ -105,9 +103,8 @@ if (spotifyPage) {
 // AUTENTICAÇÃO SPOTIFY (Implicit Grant Flow)
 // ====================================================================
 
-// Inicia o processo de autenticação, redirecionando para o Spotify
 function authenticateSpotify() {
-    const authUrl = 'http://googleusercontent.com/spotify.com/8' +
+    const authUrl = 'http://googleusercontent.com/spotify.com/authorize?' +
         'client_id=' + CLIENT_ID +
         '&response_type=token' +
         '&redirect_uri=' + encodeURIComponent(REDIRECT_URI) +
@@ -116,7 +113,6 @@ function authenticateSpotify() {
     window.location = authUrl;
 }
 
-// Checa o URL em busca de um token após o redirecionamento
 function checkSpotifyAuthentication() {
     const hash = window.location.hash
         .substring(1)
@@ -129,12 +125,11 @@ function checkSpotifyAuthentication() {
             return initial;
         }, {});
 
-    window.location.hash = ''; // Limpa o hash do URL
+    window.location.hash = '';
 
     if (hash.access_token) {
         ACCESS_TOKEN = hash.access_token;
         console.log("Token de Acesso obtido com sucesso. Duração:", hash.expires_in, "segundos.");
-        // O player será inicializado quando o SDK estiver pronto
     } else {
         console.log("Token de Acesso não encontrado. Login necessário para tocar música.");
     }
@@ -144,10 +139,8 @@ function checkSpotifyAuthentication() {
 // WEB PLAYBACK SDK E CONTROLE
 // ====================================================================
 
-// É acionado automaticamente quando o script do SDK carrega
 window.onSpotifyWebPlaybackSDKReady = () => {
     if (!ACCESS_TOKEN) {
-        // Se o token não foi carregado, exibe o botão de login
         showLoginRequired();
         return;
     }
@@ -155,7 +148,6 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     initializeSpotifyPlayer(ACCESS_TOKEN);
 };
 
-// Mostra o botão de login na área de resultados se o token não estiver disponível
 function showLoginRequired() {
     const resultsContainer = document.getElementById('music-results');
     if (resultsContainer) {
@@ -167,7 +159,10 @@ function showLoginRequired() {
                 </button>
             </div>
         `;
-        document.getElementById('login-spotify-btn').onclick = authenticateSpotify;
+        const loginButton = document.getElementById('login-spotify-btn');
+        if (loginButton) {
+            loginButton.onclick = authenticateSpotify;
+        }
     }
 }
 
@@ -196,7 +191,6 @@ function initializeSpotifyPlayer(token) {
     });
 }
 
-// Função para trocar a música usando o SDK
 async function changeTrack(button, trackId) {
     if (!spotifyPlayer || !ACCESS_TOKEN) {
         alert("🚨 Faça login no Spotify antes de tentar tocar a música.");
@@ -208,7 +202,6 @@ async function changeTrack(button, trackId) {
     try {
         await spotifyPlayer.connect(); 
         
-        // Carrega a música e começa a tocar no player do navegador
         await spotifyPlayer.loadUri(`spotify:track:${trackId}`);
         await spotifyPlayer.resume(); 
 
@@ -234,17 +227,15 @@ async function changeTrack(button, trackId) {
 // PESQUISA DE MÚSICAS
 // ====================================================================
 
-// Obter token de autenticação: prioriza o token de login, senão usa o Client Credentials
 async function getSpotifyTokenForSearch() {
     if (ACCESS_TOKEN) {
         return ACCESS_TOKEN;
     }
 
-    // ⚠️ ATENÇÃO: Se não há token de login, usa Client Credentials para pesquisa (expõe o Client Secret)
     const auth = btoa(`${CLIENT_ID}:${CLIENT_SECRET}`);
     
     try {
-        const response = await fetch('https://accounts.spotify.com/api/token', {
+        const response = await fetch('http://googleusercontent.com/spotify.com/api/token', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -253,7 +244,12 @@ async function getSpotifyTokenForSearch() {
             body: 'grant_type=client_credentials'
         });
 
-        if (!response.ok) throw new Error("Erro ao obter token de pesquisa.");
+        if (!response.ok) {
+             const errorData = await response.json();
+             console.error("Erro de Autenticação na Pesquisa (401): CLIENT SECRET incorreto ou problema na API.");
+             throw new Error(`Erro de autenticação: ${errorData.error_description || 'Verifique o Client Secret.'}`);
+        }
+        
         const data = await response.json();
         return data.access_token;
     } catch (error) {
@@ -262,14 +258,13 @@ async function getSpotifyTokenForSearch() {
     }
 }
 
-// Buscar músicas no Spotify
 async function fetchSpotifyTracks(query) {
     const token = await getSpotifyTokenForSearch();
     if (!token) return [];
 
     try {
         const response = await fetch(
-            `http://googleusercontent.com/spotify.com/9`,
+            `http://googleusercontent.com/spotify.com/v1/search?q=${encodeURIComponent(query)}&type=track&limit=10`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -277,16 +272,20 @@ async function fetchSpotifyTracks(query) {
             }
         );
 
-        if (!response.ok) throw new Error("Erro ao buscar músicas.");
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(`Erro na API: ${response.status} - ${errorData.error.message || 'Desconhecido'}`);
+        }
+        
         const data = await response.json();
-        return data.tracks.items;
+        return data.tracks && data.tracks.items ? data.tracks.items : []; 
+        
     } catch (error) {
         console.error("Falha ao buscar músicas do Spotify:", error);
         return [];
     }
 }
 
-// Exibir os resultados da pesquisa
 function displayResults(tracks) {
     const resultsContainer = document.getElementById('music-results');
     if (!resultsContainer) return;
@@ -316,7 +315,6 @@ function displayResults(tracks) {
     });
 }
 
-// Evento de Pesquisa
 document.getElementById('search-button').addEventListener('click', async () => {
     const query = document.getElementById('search-bar').value;
     if (!query) return;
